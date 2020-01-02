@@ -50,35 +50,35 @@ class Row {
 public:
   explicit Row(std::shared_ptr<class TableInternal> parent) : parent_(parent) {}
 
-  void add_cell(std::shared_ptr<Cell> cell) { cells_.push_back(cell); }
+  inline void add_cell(std::shared_ptr<Cell> cell) { cells_.push_back(cell); }
 
-  Cell &operator[](size_t index) { return cell(index); }
+  inline Cell &operator[](size_t index) { return cell(index); }
 
-  Cell &cell(size_t index) { return *(cells_[index]); }
+  inline Cell &cell(size_t index) { return *(cells_[index]); }
 
-  std::vector<std::shared_ptr<Cell>> cells() const { return cells_; }
+  inline std::vector<std::shared_ptr<Cell>> cells() const { return cells_; }
 
-  size_t size() const { return cells_.size(); }
+  inline size_t size() const { return cells_.size(); }
 
-  Format &format();
+  inline Format &format();
 
   class CellIterator {
   public:
     explicit CellIterator(std::vector<std::shared_ptr<Cell>>::iterator ptr) : ptr(ptr) {}
 
-    CellIterator operator++() {
+    inline CellIterator operator++() {
       ++ptr;
       return *this;
     }
-    bool operator!=(const CellIterator &other) const { return ptr != other.ptr; }
-    Cell &operator*() { return **ptr; }
+    inline bool operator!=(const CellIterator &other) const { return ptr != other.ptr; }
+    inline Cell &operator*() { return **ptr; }
 
   private:
     std::vector<std::shared_ptr<Cell>>::iterator ptr;
   };
 
-  auto begin() { return CellIterator(cells_.begin()); }
-  auto end() { return CellIterator(cells_.end()); }
+  inline auto begin() { return CellIterator(cells_.begin()); }
+  inline auto end() { return CellIterator(cells_.end()); }
 
 private:
   friend class Printer;
@@ -88,7 +88,7 @@ private:
   // property and return the largest configured row height
   // This is used to ensure that all cells in a row are
   // aligned when printing the column
-  size_t get_configured_height() {
+  inline size_t get_configured_height() {
     size_t result{0};
     for (size_t i = 0; i < size(); ++i) {
       auto cell = cells_[i];
@@ -108,7 +108,7 @@ private:
   // This is useful when no cell.format.height is configured
   // Call get_configured_height()
   // - If this returns 0, then use get_computed_height()
-  size_t get_computed_height(const std::vector<size_t> &column_widths) {
+  inline size_t get_computed_height(const std::vector<size_t> &column_widths) {
     size_t result{0};
     for (size_t i = 0; i < size(); ++i) {
       result = std::max(result, get_cell_height(i, column_widths[i]));
@@ -130,7 +130,7 @@ private:
   // e tab
   // ulate
   // .....
-  size_t get_cell_height(size_t cell_index, size_t column_width) {
+  inline size_t get_cell_height(size_t cell_index, size_t column_width) {
     size_t result{0};
     Cell &cell = *(cells_[cell_index]);
     auto format = cell.format();

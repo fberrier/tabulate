@@ -53,33 +53,33 @@ class Column {
 public:
   explicit Column(std::shared_ptr<class TableInternal> parent) : parent_(parent) {}
 
-  void add_cell(Cell &cell) { cells_.push_back(cell); }
+  inline void add_cell(Cell &cell) { cells_.push_back(cell); }
 
-  Cell &operator[](size_t index) { return cells_[index]; }
+  inline Cell &operator[](size_t index) { return cells_[index]; }
 
-  std::vector<std::reference_wrapper<Cell>> cells() const { return cells_; }
+  inline std::vector<std::reference_wrapper<Cell>> cells() const { return cells_; }
 
-  size_t size() const { return cells_.size(); }
+  inline size_t size() const { return cells_.size(); }
 
-  ColumnFormat format() { return ColumnFormat(*this); }
+  inline ColumnFormat format() { return ColumnFormat(*this); }
 
   class CellIterator {
   public:
     explicit CellIterator(std::vector<std::reference_wrapper<Cell>>::iterator ptr) : ptr(ptr) {}
 
-    CellIterator operator++() {
+    inline CellIterator operator++() {
       ++ptr;
       return *this;
     }
-    bool operator!=(const CellIterator &other) const { return ptr != other.ptr; }
-    Cell &operator*() { return *ptr; }
+    inline bool operator!=(const CellIterator &other) const { return ptr != other.ptr; }
+    inline Cell &operator*() { return *ptr; }
 
   private:
     std::vector<std::reference_wrapper<Cell>>::iterator ptr;
   };
 
-  auto begin() { return CellIterator(cells_.begin()); }
-  auto end() { return CellIterator(cells_.end()); }
+  inline auto begin() { return CellIterator(cells_.begin()); }
+  inline auto end() { return CellIterator(cells_.end()); }
 
 private:
   friend class ColumnFormat;
@@ -90,7 +90,7 @@ private:
   // property and return the largest configured column width
   // This is used to ensure that all cells in a column are
   // aligned when printing the column
-  size_t get_configured_width() {
+  inline size_t get_configured_width() {
     size_t result{0};
     for (size_t i = 0; i < size(); ++i) {
       auto cell = cells_[i];
@@ -109,7 +109,7 @@ private:
   // This is useful when no cell.format.width is configured
   // Call get_configured_width()
   // - If this returns 0, then use get_computed_width()
-  size_t get_computed_width() {
+  inline size_t get_computed_width() {
     size_t result{0};
     for (size_t i = 0; i < size(); ++i) {
       result = std::max(result, get_cell_width(i));
@@ -119,7 +119,7 @@ private:
 
   // Returns padding_left + cell_contents.size() + padding_right
   // for a given cell in the column
-  size_t get_cell_width(size_t cell_index) {
+  inline size_t get_cell_width(size_t cell_index) {
     size_t result{0};
     Cell &cell = cells_[cell_index].get();
     auto format = cell.format();
@@ -157,217 +157,217 @@ private:
   std::weak_ptr<class TableInternal> parent_;
 };
 
-ColumnFormat &ColumnFormat::width(size_t value) {
+inline ColumnFormat &ColumnFormat::width(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().width(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::height(size_t value) {
+inline ColumnFormat &ColumnFormat::height(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().height(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::padding(size_t value) {
+inline ColumnFormat &ColumnFormat::padding(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().padding(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::padding_left(size_t value) {
+inline ColumnFormat &ColumnFormat::padding_left(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().padding_left(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::padding_right(size_t value) {
+inline ColumnFormat &ColumnFormat::padding_right(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().padding_right(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::padding_top(size_t value) {
+inline ColumnFormat &ColumnFormat::padding_top(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().padding_top(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::padding_bottom(size_t value) {
+inline ColumnFormat &ColumnFormat::padding_bottom(size_t value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().padding_bottom(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border(const std::string &value) {
+inline ColumnFormat &ColumnFormat::border(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_left(const std::string &value) {
+inline ColumnFormat &ColumnFormat::border_left(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_left(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_left_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_left_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_left_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_left_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_left_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_left_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_right(const std::string &value) {
+inline ColumnFormat &ColumnFormat::border_right(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_right(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_right_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_right_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_right_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_right_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_right_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_right_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_top(const std::string &value) {
+inline ColumnFormat &ColumnFormat::border_top(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_top(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_top_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_top_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_top_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_top_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_top_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_top_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_bottom(const std::string &value) {
+inline ColumnFormat &ColumnFormat::border_bottom(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_bottom(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_bottom_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_bottom_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_bottom_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::border_bottom_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::border_bottom_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().border_bottom_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::corner(const std::string &value) {
+inline ColumnFormat &ColumnFormat::corner(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().corner(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::corner_color(Color value) {
+inline ColumnFormat &ColumnFormat::corner_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().corner_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::corner_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::corner_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().corner_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::column_separator(const std::string &value) {
+inline ColumnFormat &ColumnFormat::column_separator(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().column_separator(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::column_separator_color(Color value) {
+inline ColumnFormat &ColumnFormat::column_separator_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().column_separator_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::column_separator_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::column_separator_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().column_separator_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::font_align(FontAlign value) {
+inline ColumnFormat &ColumnFormat::font_align(FontAlign value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().font_align(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::font_style(const std::vector<FontStyle> &style) {
+inline ColumnFormat &ColumnFormat::font_style(const std::vector<FontStyle> &style) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().font_style(style);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::font_color(Color value) {
+inline ColumnFormat &ColumnFormat::font_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().font_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::font_background_color(Color value) {
+inline ColumnFormat &ColumnFormat::font_background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().font_background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::color(Color value) {
+inline ColumnFormat &ColumnFormat::color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::background_color(Color value) {
+inline ColumnFormat &ColumnFormat::background_color(Color value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().background_color(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::multi_byte_characters(bool value) {
+inline ColumnFormat &ColumnFormat::multi_byte_characters(bool value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().multi_byte_characters(value);
   return *this;
 }
 
-ColumnFormat &ColumnFormat::locale(const std::string &value) {
+inline ColumnFormat &ColumnFormat::locale(const std::string &value) {
   for (auto &cell : column_.get().cells_)
     cell.get().format().locale(value);
   return *this;
